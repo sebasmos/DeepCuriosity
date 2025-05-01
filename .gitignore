@@ -62,4 +62,6 @@ figures/
 *.tfrecord
 #**/.csv
 #*.csv
+*.log
+**/*.log
 qve.egg-info
