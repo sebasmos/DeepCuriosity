@@ -1,0 +1,24 @@
+# configs/config.yaml
+hydra:
+  run:
+    dir: .
+defaults:
+  - _self_
+
+environment: "Swimmer-v4"
+actor_sizes: [256, 256]
+critic_sizes: [256, 256]
+lr: 0.0003
+gamma: 0.99
+steps: 9500000
+rollout_steps: 2048
+batch_size: 2048
+epochs_per_update: 10
+value_loss_coef: 0.5
+clip_param: 0.2
+max_grad_norm: 0.5
+seed: 0
+log_interval: 1
+save_interval: 10
+device: "cuda"
+run_name: "mlp_256_raw_pytorch"

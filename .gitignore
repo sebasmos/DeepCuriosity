@@ -6,8 +6,6 @@ EXPERIMENTS/
 #**/*.txt
 outputs/
 models/
-**/*.yaml
-*.yaml
 **/*.jpg
 *.zip
 **/*.zip/
