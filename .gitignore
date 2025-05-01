@@ -6,6 +6,8 @@ EXPERIMENTS/
 #**/*.txt
 outputs/
 models/
+*.hydra
+**/*.hydra
 **/*.jpg
 *.zip
 **/*.zip/
