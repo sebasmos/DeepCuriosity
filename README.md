@@ -55,7 +55,9 @@ Use the `plot.ipynb` notebook to:
 
 ## 🗂️ Project Structure
 
-```
+## 🗂️ Project & Output Structure
+
+```bash
 RL/
 ├── baseline.py         # PPO training
 ├── icm.py              # PPO + ICM training
@@ -63,9 +65,22 @@ RL/
 ├── models.py           # Agents and ICM
 ├── buffer.py           # PPO buffer
 ├── plot.ipynb          # Notebook to view results
-├── configs/config.yaml # Training settings
-└── data/               # Checkpoints, logs, and rewards
-```
+├── configs/config.yaml # Training settings (Hydra)
+└── data/               # <== ALL training artefacts live here
+    ├── raw_pytorch/    # Baseline PPO runs
+    │   └── <env>/                 # e.g. Swimmer-v4
+    │       └── <run>_<timestamp>/ # e.g. mlp_256_raw_pytorch_20250501_101010
+    │           ├── checkpoints/          # model_update_<n>_steps_<k>.pt
+    │           ├── logs/                 # metrics.csv per update
+    │           ├── episode_rewards.npy   # per-episode returns
+    │           └── video_*.mp4           # optional rendered roll-outs
+    └── ppo_icm/       # PPO + ICM runs
+        └── <env>/
+            └── <run>_<timestamp>/        # same layout as above
+                ├── checkpoints/
+                ├── logs/
+                ├── episode_rewards.npy
+                └── video_*.mp4
 
 ---
 
@@ -80,12 +95,13 @@ If you have questions or want to collaborate, [reach out to me](https://github.c
 
 - [ ] Add new metrics
 - [ ] dm_control for adding more joints
+- [ ] Optional curiosity bonuses (RND, Disagreement, etc.)
 - [ ] Add support for more MuJoCo environments (e.g. Hopper, HalfCheetah)
 - [ ] Add TensorBoard logging
 - [ ] Add WandB support
 - [ ] Include policy evaluation script
 - [ ] Add support for model saving/loading via CLI
-- [ ] Optional curiosity bonuses (RND, Disagreement, etc.)
+
 
 ---
 

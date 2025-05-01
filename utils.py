@@ -6,7 +6,44 @@ import gymnasium as gym
 import imageio
 from models import PPOAgent_Raw, PPOAgent_ICM  
 import os
+import random
+import time
 
+def set_seed(seed):
+    """Set seed for reproducibility."""
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+
+def prepare_directories(root_dirname, cfg):
+    """Prepare run directory paths."""
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    run_dir = Path("data") / root_dirname / cfg.environment / f"{cfg.run_name}_{timestamp}"
+    ckpt_dir = run_dir / "checkpoints"
+    log_dir = run_dir / "logs"
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    return run_dir, ckpt_dir, log_dir
+
+def save_checkpoint(ckpt_dir, update, total_steps, agent, optimizer, cfg, rewards):
+    """Save training checkpoint."""
+    ckpt_path = ckpt_dir / f"model_update_{update}_steps_{total_steps}.pt"
+    torch.save({
+        'update': update,
+        'total_steps': total_steps,
+        'model_state_dict': agent.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'config': vars(cfg),
+        'episode_rewards': rewards
+    }, ckpt_path)
+
+def log_metrics(update, steps, rewards, pi_loss, v_loss, total_loss, start_time, writer):
+    """Log training metrics to CSV and print to console."""
+    recent_rewards = rewards[-10:] if rewards else [0]
+    avg_rew = np.mean(recent_rewards)
+    elapsed = time.time() - start_time
+    print(f"Update {update}, Step {steps} | AvgReward: {avg_rew:.2f} | PiLoss: {pi_loss:.4f} | VLoss: {v_loss:.4f} | Time: {elapsed:.1f}s")
+    writer.writerow([update, steps, avg_rew, pi_loss, v_loss, total_loss])
 def play_model_from_weights(ckpt_path, seed=0, render=True):
     """
     Load a model (baseline or ICM) from checkpoint and play one episode.
