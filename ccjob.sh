@@ -17,7 +17,6 @@ source $SLURM_TMPDIR/env/bin/activate
 
 pip install --no-index --upgrade pip
 cd /home/yorguin/scratch/DeepCuriosity
-pip install --no-index -r requirements.txt
-#pip install -r requirements_cc.txt
+pip install --no-cache-dir --no-index -r requirements_cc.txt
 python baseline.py --config configs/config.yaml --variant default
 python icm.py --config configs/config.yaml --variant icm
