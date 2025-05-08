@@ -1,9 +1,9 @@
-gymnasium==1.0.0
-imageio==2.33.1
-matplotlib==3.10.1
-numpy==2.2.2
-pandas==2.2.3
-torch==2.5.1
+gymnasium
+imageio
+matplotlib
+numpy
+pandas
+torch
 imageio[ffmpeg]
-hydra-core==1.3.2
+hydra-core
 glfw
