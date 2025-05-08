@@ -10,13 +10,14 @@
 #SBATCH --mail-type=ALL
 
 module load python/3.11.5
+module load mujoco/3.3.0
 #virtualenv --no-download $SLURM_TMPDIR/env
 virtualenv $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 pip install --no-index --upgrade pip
 cd /home/yorguin/scratch/DeepCuriosity
-##pip install --no-index -r requirements.txt
-pip install -r requirements_cc.txt
+pip install --no-index -r requirements.txt
+#pip install -r requirements_cc.txt
 python baseline.py --config configs/config.yaml --variant default
 python icm.py --config configs/config.yaml --variant icm
