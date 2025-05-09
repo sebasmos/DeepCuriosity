@@ -40,7 +40,7 @@ python baseline.py
 ### Train PPO + ICM:
 
 ```bash
-python icm.py --config configs/config.yaml --variant icm
+python curiosity.py 
 ```
 
 ---
