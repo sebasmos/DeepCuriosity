@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ### Train PPO:
 
 ```bash
-python baseline.py --config configs/config.yaml --variant default
+python baseline.py
 ```
 
 ### Train PPO + ICM:
