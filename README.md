@@ -31,17 +31,20 @@ pip install -r requirements.txt
 
 ## 🚀 How to Run
 
-### Train PPO:
+> **Note:** All hyper-parameters are sensible defaults—only tweak the `steps` value and `run_name` in `configs/config.yaml` if you need a shorter or longer runtime; everything else can stay as is.
+
+### Train PPO
 
 ```bash
 python baseline.py
-```
+````
 
-### Train PPO + ICM:
+### Train PPO + ICM
 
 ```bash
-python curiosity.py 
+python curiosity.py
 ```
+
 
 ---
 
