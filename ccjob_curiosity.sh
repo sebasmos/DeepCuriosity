@@ -5,9 +5,9 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=16G
 #SBATCH --time=0-03:00:00
-#SBATCH --job-name=baseline
-#SBATCH --output=%j-baseline.out
-#SBATCH --error=%j-baseline.err
+#SBATCH --job-name=curiosity
+#SBATCH --output=%j-curiosity.out
+#SBATCH --error=%j-curiosity.err
 #SBATCH --mail-user=yjmantilla@gmail.com
 #SBATCH --mail-type=ALL
 
