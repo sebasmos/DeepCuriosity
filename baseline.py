@@ -19,6 +19,15 @@ def train(cfg: DictConfig):
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     act_limit = env.action_space.high[0]
+    if cfg.device == "auto":
+        cfg.device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        cfg.device = cfg.device.lower()
+        if cfg.device not in ["cpu", "cuda"]:
+            raise ValueError(f"Invalid device: {cfg.device}. Use 'cpu' or 'cuda'.")
+    if cfg.device == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("CUDA is not available. Use 'cpu' instead.")
+    print(f"Using device: {cfg.device}")
 
     agent = PPOAgent_Raw(obs_dim, act_dim, cfg.actor_sizes, cfg.critic_sizes, act_limit).to(cfg.device)
     optimizer = torch.optim.Adam(agent.parameters(), lr=cfg.lr)

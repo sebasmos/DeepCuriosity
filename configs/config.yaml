@@ -20,5 +20,5 @@ max_grad_norm: 0.5
 seed: 0
 log_interval: 1
 save_interval: 10
-device: "cuda"
+device: "auto"
 run_name: "mlp_256_raw_pytorch"
