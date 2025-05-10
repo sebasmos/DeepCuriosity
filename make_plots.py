@@ -23,3 +23,6 @@ def main(cfg: DictConfig):
         compare_rewards_plot(raw_dir, icm_dir)
     except Exception as e:
         print(f"Error during plotting: {e}")
+
+if __name__ == "__main__":
+    main()
