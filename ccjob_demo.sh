@@ -1,11 +1,13 @@
 #! /bin/bash
 #SBATCH --account=def-kjerbi
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=8G
-#SBATCH --time=0-00:05:00
-#SBATCH --job-name=example
-#SBATCH --output=%j-example.out
-#SBATCH --error=%j-example.err
+#SBATCH --cpus-per-task=1
+#SBATCH --gpus-per-node=p100:1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem=16G
+#SBATCH --time=0-03:00:00
+#SBATCH --job-name=demo
+#SBATCH --output=%j-demo.out
+#SBATCH --error=%j-demo.err
 #SBATCH --mail-user=yjmantilla@gmail.com
 #SBATCH --mail-type=ALL
 
