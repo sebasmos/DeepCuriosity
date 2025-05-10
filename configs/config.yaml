@@ -5,7 +5,7 @@ hydra:
 defaults:
   - _self_
 
-environment: "Swimmer-v4"
+environment: "Swimmer-v5"
 actor_sizes: [256, 256]
 critic_sizes: [256, 256]
 lr: 0.0003
@@ -22,3 +22,6 @@ log_interval: 1
 save_interval: 10
 device: "auto"
 run_name: "mlp_256_raw_pytorch"
+n_joints: 4
+density: 3000
+viscosity: 0.001

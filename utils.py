@@ -8,13 +8,27 @@ from models import PPOAgent_Raw, PPOAgent_ICM
 import os
 import random
 import time
-
+from swimmer import get_model_and_assets
 def set_seed(seed):
     """Set seed for reproducibility."""
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
 
+def get_swimmer_xml(cfg):
+    xml_file = Path(__file__).parent / "swimmers"/ f"swimmer_njoints-{cfg.n_joints}_density-{cfg.density}_viscosity-{cfg.viscosity}.xml"
+    if xml_file.exists():
+        print(f"[✓] XML file already exists: {xml_file}")
+        return xml_file
+    else:
+        xml_data = str(get_model_and_assets(cfg.n_joints), encoding="utf-8")
+        xml_data = xml_data.replace('density="3000"', f'density="{cfg.density}" viscosity="{cfg.viscosity}"')
+        os.makedirs(xml_file.parent, exist_ok=True)
+        # save the XML file
+        with open(xml_file, "w") as f:
+            f.write(xml_data)
+        print(f"[✓] XML file created: {xml_file}")
+        return xml_file
 def prepare_directories(root_dirname, cfg):
     """Prepare run directory paths."""
     timestamp = time.strftime("%Y%m%d_%H%M%S")

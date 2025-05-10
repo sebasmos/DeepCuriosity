@@ -8,3 +8,4 @@ torch
 imageio[ffmpeg]
 hydra-core
 glfw
+lxml

@@ -1,7 +1,7 @@
 # baseline.py
 import hydra
 from omegaconf import DictConfig
-from utils import set_seed, save_checkpoint, log_metrics, prepare_directories
+from utils import set_seed, save_checkpoint, log_metrics, prepare_directories,get_swimmer_xml
 from models import PPOAgent_Raw
 from buffer import PPOBuffer
 import torch
@@ -11,11 +11,11 @@ from pathlib import Path
 import time, csv
 import gymnasium as gym
 
-
 @hydra.main(config_path="configs", config_name="config", version_base="1.1")
 def train(cfg: DictConfig):
     set_seed(cfg.seed)
-    env = gym.make(cfg.environment, render_mode='rgb_array')
+    xml_file = get_swimmer_xml(cfg)
+    env = gym.make(cfg.environment, render_mode='rgb_array', xml_file=xml_file.as_posix())
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     act_limit = env.action_space.high[0]
