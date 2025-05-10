@@ -1,5 +1,6 @@
 ## salloc --time=1:0:0 --mem-per-cpu=16G --ntasks=1 --account=def-kjerbi
 
+deactivate
 module purge
 module load python/3.11.5
 module load mujoco/3.3.0

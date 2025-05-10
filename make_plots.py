@@ -13,6 +13,9 @@ def main(cfg: DictConfig):
     raw_dir, ckpt_dir, log_dir = prepare_directories(raw_name, cfg)
     icm_dir, ckpt_dir, log_dir = prepare_directories(icm_name, cfg)
 
+    print(f"Raw directory: {raw_dir}")
+    print(f"ICM directory: {icm_dir}")
+
     try:
         plot_metrics(raw_dir)
         plot_metrics(icm_dir)
