@@ -14,7 +14,7 @@ def main(cfg: DictConfig):
     cfgicm = cfg.copy()
     cfgicm.run_name = icm_name
     raw_dir, ckpt_dir, log_dir = prepare_directories("raw_pytorch", cfgraw)
-    icm_dir, ckpt_dir, log_dir = prepare_directories(""ppo_icm"", cfgicm)
+    icm_dir, ckpt_dir, log_dir = prepare_directories("ppo_icm", cfgicm)
 
     print(f"Raw directory: {raw_dir}")
     print(f"ICM directory: {icm_dir}")
