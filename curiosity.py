@@ -3,7 +3,7 @@
 import hydra
 from omegaconf import DictConfig
 
-from utils   import set_seed, prepare_directories, save_checkpoint, log_metrics
+from utils   import set_seed, prepare_directories, save_checkpoint, log_metrics, load_latest_checkpoint
 from models  import PPOAgent_ICM
 from buffer  import PPOBuffer
 
@@ -41,6 +41,15 @@ def train(cfg: DictConfig):
                            cfg.gamma, device=cfg.device)
 
     run_dir, ckpt_dir, log_dir = prepare_directories("ppo_icm", cfg)
+    
+    # Try to load from latest checkpoint
+    checkpoint, update_num, total_steps, all_rewards = load_latest_checkpoint(ckpt_dir, agent, optimizer)
+    if checkpoint is not None:
+        print(f"Resuming training from update {update_num}, step {total_steps}")
+    else:
+        update_num = 0
+        total_steps = 0
+        all_rewards = []
 
     # ───── csv logger ───────────────────────────────────────────────────────────
     log_f = open(log_dir / "metrics.csv", "w", newline="")
@@ -52,9 +61,6 @@ def train(cfg: DictConfig):
     # ───── training loop ────────────────────────────────────────────────────────
     obs, _          = env.reset(seed=cfg.seed)
     ep_ret, ep_len  = 0.0, 0
-    total_steps     = 0
-    update_num      = 0
-    all_rewards     = []
     start_time      = time.time()
 
     while total_steps < cfg.steps:

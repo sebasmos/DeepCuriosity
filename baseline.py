@@ -1,7 +1,7 @@
 # baseline.py
 import hydra
 from omegaconf import DictConfig
-from utils import set_seed, save_checkpoint, log_metrics, prepare_directories
+from utils import set_seed, save_checkpoint, log_metrics, prepare_directories, load_latest_checkpoint
 from models import PPOAgent_Raw
 from buffer import PPOBuffer
 import torch
@@ -34,15 +34,22 @@ def train(cfg: DictConfig):
     buffer = PPOBuffer(obs_dim, act_dim, cfg.rollout_steps, cfg.gamma, device=cfg.device)
 
     run_dir, ckpt_dir, log_dir = prepare_directories("raw_pytorch", cfg)
+    
+    # Try to load from latest checkpoint
+    checkpoint, update_num, total_steps, all_episode_rewards = load_latest_checkpoint(ckpt_dir, agent, optimizer)
+    if checkpoint is not None:
+        print(f"Resuming training from update {update_num}, step {total_steps}")
+    else:
+        update_num = 0
+        total_steps = 0
+        all_episode_rewards = []
+
     log_file_handle = open(log_dir / "metrics.csv", 'w', newline='')
     log_writer = csv.writer(log_file_handle)
     log_writer.writerow(['update', 'step', 'avg_ep_reward', 'loss_pi', 'loss_v', 'total_loss'])
 
     obs, _ = env.reset(seed=cfg.seed)
     ep_ret, ep_len = 0.0, 0
-    total_steps = 0
-    update_num = 0
-    all_episode_rewards = []
     start_time = time.time()
 
     while total_steps < cfg.steps:

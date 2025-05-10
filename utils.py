@@ -18,7 +18,19 @@ def set_seed(seed):
 def prepare_directories(root_dirname, cfg):
     """Prepare run directory paths."""
     timestamp = time.strftime("%Y%m%d_%H%M%S")
-    run_dir = Path("data") / root_dirname / cfg.environment / f"{cfg.run_name}_{timestamp}"
+    base_dir = Path("data") / root_dirname / cfg.environment
+    
+    # Check if a run with this name already exists
+    existing_runs = list(base_dir.glob(f"{cfg.run_name}_*"))
+    if existing_runs:
+        # Use the most recent run directory
+        run_dir = max(existing_runs, key=lambda x: x.stat().st_mtime)
+        print(f"Found existing run directory: {run_dir}")
+    else:
+        # Create new run directory
+        run_dir = base_dir / f"{cfg.run_name}_{timestamp}"
+        print(f"Creating new run directory: {run_dir}")
+    
     ckpt_dir = run_dir / "checkpoints"
     log_dir = run_dir / "logs"
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -44,6 +56,7 @@ def log_metrics(update, steps, rewards, pi_loss, v_loss, total_loss, start_time,
     elapsed = time.time() - start_time
     print(f"Update {update}, Step {steps} | AvgReward: {avg_rew:.2f} | PiLoss: {pi_loss:.4f} | VLoss: {v_loss:.4f} | Time: {elapsed:.1f}s")
     writer.writerow([update, steps, avg_rew, pi_loss, v_loss, total_loss])
+
 def play_model_from_weights(ckpt_path, seed=0, render=True):
     """
     Load a model (baseline or ICM) from checkpoint and play one episode.
@@ -181,3 +194,22 @@ def compare_rewards_plot(raw_dir, icm_dir):
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+def load_latest_checkpoint(ckpt_dir, agent, optimizer):
+    """Load the latest checkpoint if it exists."""
+    if not ckpt_dir.exists():
+        return None, 0, 0, []
+    
+    checkpoints = list(ckpt_dir.glob("model_update_*_steps_*.pt"))
+    if not checkpoints:
+        return None, 0, 0, []
+    
+    # Get the latest checkpoint based on update number
+    latest_ckpt = max(checkpoints, key=lambda x: int(x.stem.split('_')[2]))
+    print(f"Loading checkpoint: {latest_ckpt}")
+    
+    checkpoint = torch.load(latest_ckpt)
+    agent.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    
+    return checkpoint, checkpoint['update'], checkpoint['total_steps'], checkpoint['episode_rewards']
