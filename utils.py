@@ -69,7 +69,7 @@ def play_model_from_weights(ckpt_path, seed=0, render=True):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ckpt_path = Path(ckpt_path)
-    checkpoint = torch.load(ckpt_path, map_location=device)
+    checkpoint = torch.load(ckpt_path, map_location=device,weights_only=False)
     cfg = checkpoint["config"]
 
     env = gym.make(cfg["environment"], render_mode="rgb_array" if render else None)
@@ -208,8 +208,8 @@ def load_latest_checkpoint(ckpt_dir, agent, optimizer):
     latest_ckpt = max(checkpoints, key=lambda x: int(x.stem.split('_')[2]))
     print(f"Loading checkpoint: {latest_ckpt}")
     
-    checkpoint = torch.load(latest_ckpt)
+    checkpoint = torch.load(latest_ckpt,weights_only=False)
     agent.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     
-    return checkpoint, checkpoint['update'], checkpoint['total_steps'], checkpoint['episode_rewards']
+    return checkpoint, checkpoint['update'], checkpoint['total_steps'], checkpoint['episode_rewards'],agent, optimizer

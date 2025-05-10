@@ -36,7 +36,7 @@ def train(cfg: DictConfig):
     run_dir, ckpt_dir, log_dir = prepare_directories("raw_pytorch", cfg)
     
     # Try to load from latest checkpoint
-    checkpoint, update_num, total_steps, all_episode_rewards = load_latest_checkpoint(ckpt_dir, agent, optimizer)
+    checkpoint, update_num, total_steps, all_episode_rewards,agent,optimizer = load_latest_checkpoint(ckpt_dir, agent, optimizer)
     if checkpoint is not None:
         print(f"Resuming training from update {update_num}, step {total_steps}")
     else:
