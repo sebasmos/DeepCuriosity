@@ -9,9 +9,12 @@ from omegaconf import DictConfig
 def main(cfg: DictConfig):
     raw_name = "alg-ppobase_env-swimmerv4_arch-mlp256"
     icm_name = "alg-ppoicm_env-swimmerv4_arch-mlp256"
-
-    raw_dir, ckpt_dir, log_dir = prepare_directories(raw_name, cfg)
-    icm_dir, ckpt_dir, log_dir = prepare_directories(icm_name, cfg)
+    cfgraw = cfg.copy()
+    cfgraw.run_name = raw_name
+    cfgicm = cfg.copy()
+    cfgicm.run_name = icm_name
+    raw_dir, ckpt_dir, log_dir = prepare_directories("raw_pytorch", cfgraw)
+    icm_dir, ckpt_dir, log_dir = prepare_directories(""ppo_icm"", cfgicm)
 
     print(f"Raw directory: {raw_dir}")
     print(f"ICM directory: {icm_dir}")
