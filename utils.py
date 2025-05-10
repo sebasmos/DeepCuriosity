@@ -172,8 +172,8 @@ def plot_metrics(run_dir):
         print(f"[Warning] Could not plot rewards: {e}")
 
     plt.tight_layout()
-    plt.show()
-
+    plt.savefig(run_dir / "training_metrics.png")
+    plt.close('all')
 
 def compare_rewards_plot(raw_dir, icm_dir):
     """Compare reward curves between baseline PPO and PPO + ICM."""
@@ -193,7 +193,8 @@ def compare_rewards_plot(raw_dir, icm_dir):
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
-    plt.show()
+    plt.savefig("comparison_rewards.png")
+    plt.close('all')
 
 def load_latest_checkpoint(ckpt_dir, agent, optimizer):
     """Load the latest checkpoint if it exists."""
